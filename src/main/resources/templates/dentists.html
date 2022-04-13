@@ -40,7 +40,8 @@
                 <th scope="col">Nombre</th>
                 <th scope="col">Apellido</th>
                 <th scope="col">Matricula</th>
-                <th scope="col"></th>
+                <th scope="col">Turnos asignados</th>
+                <th scope="col">Acciones</th>
             </tr>
             </thead>
             <tbody>
@@ -49,6 +50,7 @@
                     <td th:text ="${dentist.name}"></td>
                     <td th:text ="${dentist.lastname}"></td>
                     <td th:text ="${dentist.medicalLicense}"></td>
+                    <td><a class="btn btn-info" th:href="@{'/appointments/filter/dentist'+'/'+${dentist.id}}">Ver turnos</a></td>
                     <td>
                         <a class="btn btn-warning" th:href="@{'/dentists/update'+'/'+${dentist.id}}">Editar</a>
                         <a class="btn btn-danger" th:href="@{'/dentists/delete'+'/'+${dentist.id}}">Eliminar</a>

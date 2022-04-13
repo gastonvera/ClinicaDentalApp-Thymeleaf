@@ -1,8 +1,10 @@
 package com.example.ClinicaDentalApp.controller;
 
 import com.example.ClinicaDentalApp.dto.PatientDTO;
+import com.example.ClinicaDentalApp.entities.Appointment;
 import com.example.ClinicaDentalApp.entities.Dentist;
 import com.example.ClinicaDentalApp.entities.Patient;
+import com.example.ClinicaDentalApp.service.implementation.AppointmentService;
 import com.example.ClinicaDentalApp.service.implementation.PatientService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -19,6 +21,9 @@ public class PatientController {
 
     @Autowired
     private PatientService patientService;
+
+    @Autowired
+    private AppointmentService appointmentService;
 
 
     /** Aqui voy a cargar los pacientes*/
@@ -95,12 +100,13 @@ public class PatientController {
      */
     @GetMapping("/delete/{id}")
     public String delete(@PathVariable Integer id) {
-        Patient patient = patientService.findEntityById(id);
-        if (patient != null) {
-            patient.setAddress(null);
+        List<Appointment> appointmentList = appointmentService.findAppointmentsForPatientById(id);
+        if (appointmentList != null) {
             patientService.delete(id);
+            return "redirect:/patients";
+        } else {
+            return "redirect:/error";
         }
-        return "redirect:/patients";
     }
 
     @GetMapping

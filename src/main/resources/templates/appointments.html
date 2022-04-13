@@ -33,33 +33,38 @@
         </div>
     </div>
     <div>
-        <table class="table">
-            <thead class="table-dark">
-            <tr>
-                <th scope="col">#</th>
-                <th scope="col">Consultorio</th>
-                <th scope="col">Fecha</th>
-                <th scope="col">Hora</th>
-                <th scope="col">Paciente</th>
-                <th scope="col">Odontologo</th>
-                <th scope="col"></th>
-            </tr>
-            </thead>
-            <tbody>
-            <tr th:each="appointment : ${appointmentList}">
-                <td th:text ="${appointment.id}"></td>
-                <td th:text ="${appointment.consultingRoom}"></td>
-                <td th:text ="${appointment.date}"></td>
-                <td th:text ="${appointment.hour}"></td>
-                <td th:text ="${appointment.patient.name} + ' ' + ${appointment.patient.lastname}"></td>
-                <td th:text ="${appointment.dentist.name} + ' ' + ${appointment.dentist.lastname}"></td>
-                <td>
-                    <a class="btn btn-warning" th:href="@{'/appointments/update'+'/'+${appointment.id}}">Editar</a>
-                    <a class="btn btn-danger" th:href="@{'/appointments/delete'+'/'+${appointment.id}}">Eliminar</a>
-                </td>
-            </tr>
-            </tbody>
-        </table>
+        <div th:if="${appointmentList == null}">
+            <h4 class="container text-center">No hay turnos asignados</h4>
+        </div>
+        <div th:unless="${appointmentList == null}">
+            <table class="table">
+                <thead class="table-dark">
+                <tr>
+                    <th scope="col">#</th>
+                    <th scope="col">Consultorio</th>
+                    <th scope="col">Fecha</th>
+                    <th scope="col">Hora</th>
+                    <th scope="col">Paciente</th>
+                    <th scope="col">Odontologo</th>
+                    <th scope="col"></th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="appointment : ${appointmentList}">
+                    <td th:text ="${appointment.id}"></td>
+                    <td th:text ="${appointment.consultingRoom}"></td>
+                    <td th:text ="${appointment.date}"></td>
+                    <td th:text ="${appointment.hour}"></td>
+                    <td th:text ="${appointment.patient.name} + ' ' + ${appointment.patient.lastname}"></td>
+                    <td th:text ="${appointment.dentist.name} + ' ' + ${appointment.dentist.lastname}"></td>
+                    <td>
+                        <a class="btn btn-warning" th:href="@{'/appointments/update'+'/'+${appointment.id}}">Editar</a>
+                        <a class="btn btn-danger" th:href="@{'/appointments/delete'+'/'+${appointment.id}}">Eliminar</a>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
     </div>
 </div>
 </body>

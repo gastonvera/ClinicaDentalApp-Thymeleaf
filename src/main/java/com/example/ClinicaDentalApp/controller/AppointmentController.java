@@ -132,11 +132,18 @@ public class AppointmentController {
         }
     }
 
-    @GetMapping("/filter/{patient_id}")
+    @GetMapping("/filter/patient/{patient_id}")
     public String filterByPatientId(@PathVariable Integer patient_id, Model model){
-            List<Appointment> appointmentList = appointmentService.findAppointmentsById(patient_id);
+            List<Appointment> appointmentList = appointmentService.findAppointmentsForPatientById(patient_id);
             model.addAttribute("appointmentList",appointmentList );
             return "appointments";
+    }
+
+    @GetMapping("/filter/dentist/{dentist_id}")
+    public String filterByDentistId(@PathVariable Integer dentist_id, Model model){
+        List<Appointment> appointmentList = appointmentService.findAppointmentsForDentistById(dentist_id);
+        model.addAttribute("appointmentList",appointmentList );
+        return "appointments";
     }
 
 

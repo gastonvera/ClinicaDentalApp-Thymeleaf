@@ -44,8 +44,15 @@ public class AppointmentService implements IAppointmentService {
     }
 
     @Override
-    public List<Appointment> findAppointmentsById(Integer patient_id) {
-        List<Appointment> appointmentList =  iAppointmentRepository.findAppointmentsById(patient_id);
+    public List<Appointment> findAppointmentsForPatientById(Integer patient_id) {
+        List<Appointment> appointmentList =  iAppointmentRepository.findAppointmentsForPatientById(patient_id);
+        List<AppointmentDTO> appointmentDTOList = appointmentList.stream().map(appointment -> mapDTO(appointment)).collect(Collectors.toList());
+        return appointmentList;
+    }
+
+    @Override
+    public List<Appointment> findAppointmentsForDentistById(Integer patient_id) {
+        List<Appointment> appointmentList =  iAppointmentRepository.findAppointmentsForDentistById(patient_id);
         List<AppointmentDTO> appointmentDTOList = appointmentList.stream().map(appointment -> mapDTO(appointment)).collect(Collectors.toList());
         return appointmentList;
     }

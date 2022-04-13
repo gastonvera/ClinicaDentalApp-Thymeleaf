@@ -53,7 +53,9 @@ import java.util.stream.Collectors;
 
         @Override
         public void delete(Integer id) {
-            if(iPatientRepository.findById(id).isPresent()){
+            Patient patient = iPatientRepository.getById(id);
+            if(patient != null){
+                patient.setAddress(null);
                 iPatientRepository.deleteById(id);
             }
         }

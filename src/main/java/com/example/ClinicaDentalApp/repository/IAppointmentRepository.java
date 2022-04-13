@@ -12,5 +12,9 @@ public interface IAppointmentRepository extends JpaRepository<Appointment, Integ
 
     /**Esta es una query para devolver los turnos de un paciente*/
     @Query(value = "SELECT * FROM appointments WHERE patient_id = ?1", nativeQuery = true)
-    List<Appointment> findAppointmentsById(Integer id);
+    List<Appointment> findAppointmentsForPatientById(Integer id);
+
+    /**Esta es una query para devolver los turnos asignados a un odontologo*/
+    @Query(value = "SELECT * FROM appointments WHERE dentist_id = ?1", nativeQuery = true)
+    List<Appointment> findAppointmentsForDentistById(Integer id);
 }

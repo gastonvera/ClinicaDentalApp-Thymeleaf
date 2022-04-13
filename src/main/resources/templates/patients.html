@@ -49,8 +49,8 @@
                 <td th:text ="${patient.id}"></td>
                 <td th:text ="${patient.name}"></td>
                 <td th:text ="${patient.lastname}"></td>
-                <td th:text ="${patient.dni}"></td>
-                <td><a class="btn btn-info" th:href="@{'/appointments/filter'+'/'+${patient.id}}">Ver turnos</a></td>
+                <td th:text ="${patient.dni}">Historial de turnos</td>
+                <td><a class="btn btn-info" th:href="@{'/appointments/filter/patient'+'/'+${patient.id}}">Ver turnos</a></td>
                 <td>
                     <a class="btn btn-warning" th:href="@{'/patients/update'+'/'+${patient.id}}">Editar</a>
                     <a class="btn btn-danger" th:href="@{'/patients/delete'+'/'+${patient.id}}">Eliminar</a>
