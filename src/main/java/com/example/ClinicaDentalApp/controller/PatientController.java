@@ -28,29 +28,13 @@ public class PatientController {
 
     /** Aqui voy a cargar los pacientes*/
 
-    /*
-    //con rest
-    @PostMapping(
-            consumes = MediaType.APPLICATION_JSON_VALUE,
-            produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<PatientDTO> create(@RequestBody Patient newPatient) throws ServerException {
-        PatientDTO patientDTO = patientService.save(newPatient);
-        if (patientDTO == null) {
-            throw new ServerException("Error al insertar paciente");
-        } else {
-            return new ResponseEntity<>(patientDTO, HttpStatus.CREATED);
-        }
-    }
-
-     */
     @PostMapping("save")
     public String create(Patient newPatient){
         patientService.save(newPatient);
         return "redirect:/patients";
     }
 
-    /** Aqui voy a buscar un paciente por id
-     * @return*/
+    /** Aqui voy a buscar un paciente por id*/
 
     @GetMapping("/{id}")
     public ResponseEntity<PatientDTO> findById(@PathVariable int id) throws ServerException{
@@ -63,17 +47,6 @@ public class PatientController {
 
     /** Aqui voy a modificar a un paciente*/
 
-    /*
-    @PutMapping("/update")
-    public ResponseEntity<PatientDTO> update(@RequestBody PatientDTO patientDTO) throws ServerException{
-        if(patientService.getById(patientDTO.getId()) == null){
-            throw new ServerException("No se encontro el paciente");
-        } else {
-            return ResponseEntity.ok(patientService.update(patientDTO));
-        }
-    }
-
-     */
     @GetMapping("update/{id}")
     public String updatePatient(@PathVariable Integer id, Model model) {
         Patient patient = patientService.findEntityById(id);
@@ -83,21 +56,6 @@ public class PatientController {
 
     /** Aqui voy a eliminar a un paciente */
 
-    /*
-    @DeleteMapping("/delete/{id}")
-    public ResponseEntity<String> eliminar(@PathVariable Integer id) {
-        ResponseEntity<String> response = null;
-
-        if (patientService.getById(id) != null) {
-            patientService.delete(id);
-            response = ResponseEntity.status(HttpStatus.NO_CONTENT).body("Turno eliminado");
-        } else {
-            response = ResponseEntity.status(HttpStatus.NOT_FOUND).build();
-        }
-
-        return response;
-    }
-     */
     @GetMapping("/delete/{id}")
     public String delete(@PathVariable Integer id) {
         List<Appointment> appointmentList = appointmentService.findAppointmentsForPatientById(id);
@@ -132,5 +90,47 @@ public class PatientController {
     public ResponseEntity<List<Patient>> turnos() {
         return ResponseEntity.ok(patientService.traerTodos());
     }
+
+    /**Guardo para rest*/
+
+
+    /*
+    @PutMapping("/update")
+    public ResponseEntity<PatientDTO> update(@RequestBody PatientDTO patientDTO) throws ServerException{
+        if(patientService.getById(patientDTO.getId()) == null){
+            throw new ServerException("No se encontro el paciente");
+        } else {
+            return ResponseEntity.ok(patientService.update(patientDTO));
+        }
+    }
+
+//con rest
+    @PostMapping(
+            consumes = MediaType.APPLICATION_JSON_VALUE,
+            produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<PatientDTO> create(@RequestBody Patient newPatient) throws ServerException {
+        PatientDTO patientDTO = patientService.save(newPatient);
+        if (patientDTO == null) {
+            throw new ServerException("Error al insertar paciente");
+        } else {
+            return new ResponseEntity<>(patientDTO, HttpStatus.CREATED);
+        }
+    }
+
+     @DeleteMapping("/delete/{id}")
+    public ResponseEntity<String> eliminar(@PathVariable Integer id) {
+        ResponseEntity<String> response = null;
+
+        if (patientService.getById(id) != null) {
+            patientService.delete(id);
+            response = ResponseEntity.status(HttpStatus.NO_CONTENT).body("Turno eliminado");
+        } else {
+            response = ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        }
+
+        return response;
+    }
+
+     */
 
 }

@@ -27,18 +27,6 @@ public class DentistController {
 
     /** Aqui voy a cargar los dentistas */
 
-    /*
-    //Con rest
-    @PostMapping("/save")
-    public ResponseEntity<DentistDTO> create(@RequestBody Dentist newDentist) throws ServerException {
-        DentistDTO dentistDTO = dentistService.save(newDentist);
-        if (dentistDTO == null) {
-            throw new ServerException("Error al insertar dentista");
-        } else {
-            return new ResponseEntity<>(dentistDTO, HttpStatus.CREATED);
-        }
-    }
-     */
     @PostMapping("/save")
     public String create(Dentist newDentist){
         dentistService.save(newDentist);
@@ -58,18 +46,6 @@ public class DentistController {
 
     /** Aqui voy a modificar a un dentista */
 
-    /*
-    @PutMapping("/edit/{id}")
-    public ResponseEntity<DentistDTO> update(@RequestBody DentistDTO dentistDTO) throws ServerException{
-        if(dentistService.getById(dentistDTO.getId()) == null){
-            throw new ServerException("No se encontro el odontologo");
-        } else {
-            return ResponseEntity.ok(dentistService.update(dentistDTO));
-        }
-    }
-
-     */
-
     @GetMapping("update/{id}")
     public String updateDentist(@PathVariable Integer id, Model model) {
         Dentist dentist = dentistService.findEntityById(id);
@@ -79,20 +55,6 @@ public class DentistController {
 
     /** Aqui voy a eliminar a un odontologo */
 
-    /*
-    @DeleteMapping("/delete/{id}")
-    public ResponseEntity<String> delete(@PathVariable Integer id) {
-        ResponseEntity<String> response = null;
-        if (dentistService.getById(id) != null) {
-            dentistService.delete(id);
-            response = ResponseEntity.status(HttpStatus.NO_CONTENT).body("Turno eliminado");
-        } else {
-            response = ResponseEntity.status(HttpStatus.NOT_FOUND).build();
-        }
-        return response;
-    }
-
-     */
     @GetMapping("/delete/{id}")
     public String delete(@PathVariable Integer id){
         List<Appointment> appointmentsList = appointmentService.findAppointmentsForDentistById(id);
@@ -116,11 +78,49 @@ public class DentistController {
         }
     }
 
-    /**Aqui voy a obtener los datos del dentista*/
+    /**Aqui voy a obtener los datos del dentista FORM*/
 
     @GetMapping("/new")
     public String showNewForm(Model model){
         model.addAttribute("dentist", new Dentist());
         return "dentistForm";
     }
+
+    /** Voy a guardar para rest*/
+
+     /*
+
+    //Con rest
+    @PostMapping("/save")
+    public ResponseEntity<DentistDTO> create(@RequestBody Dentist newDentist) throws ServerException {
+        DentistDTO dentistDTO = dentistService.save(newDentist);
+        if (dentistDTO == null) {
+            throw new ServerException("Error al insertar dentista");
+        } else {
+            return new ResponseEntity<>(dentistDTO, HttpStatus.CREATED);
+        }
+    }
+
+    @PutMapping("/edit/{id}")
+    public ResponseEntity<DentistDTO> update(@RequestBody DentistDTO dentistDTO) throws ServerException{
+        if(dentistService.getById(dentistDTO.getId()) == null){
+            throw new ServerException("No se encontro el odontologo");
+        } else {
+            return ResponseEntity.ok(dentistService.update(dentistDTO));
+        }
+    }
+
+     @DeleteMapping("/delete/{id}")
+    public ResponseEntity<String> delete(@PathVariable Integer id) {
+        ResponseEntity<String> response = null;
+        if (dentistService.getById(id) != null) {
+            dentistService.delete(id);
+            response = ResponseEntity.status(HttpStatus.NO_CONTENT).body("Turno eliminado");
+        } else {
+            response = ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        }
+        return response;
+    }
+
+     */
 }

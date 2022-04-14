@@ -31,21 +31,6 @@ public class AppointmentController {
 
     /** Aqui voy a cargar los turnos*/
 
-    /*
-    //con rest
-    @PostMapping(name = "save",
-            consumes = MediaType.APPLICATION_JSON_VALUE,
-            produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<AppointmentDTO> create(@RequestBody Appointment newAppointment) throws ServerException {
-        AppointmentDTO appointmentDTO = appointmentService.save(newAppointment);
-        if (appointmentDTO == null) {
-            throw new ServerException("Error al insertar el turno");
-        } else {
-            return new ResponseEntity<>(appointmentDTO, HttpStatus.CREATED);
-        }
-    }
-
-     */
     @PostMapping("/save")
     public String create(Appointment newAppointment){
         appointmentService.save(newAppointment);
@@ -65,17 +50,7 @@ public class AppointmentController {
 
     /** Aqui voy a modificar a un turno*/
 
-    /*
-    @PutMapping("/update")
-    public ResponseEntity<AppointmentDTO> update(@RequestBody AppointmentDTO appointmentDTO) throws ServerException{
-        if(appointmentService.update(appointmentDTO) == null){
-            throw new ServerException("No se encontro el paciente");
-        } else {
-            return ResponseEntity.ok(appointmentService.update(appointmentDTO));
-        }
-    }
 
-     */
     @PutMapping("/update")
     public String update(Appointment appointment){
         appointmentService.save(appointment);
@@ -92,34 +67,23 @@ public class AppointmentController {
         model.addAttribute("appointment", appointment);
         return "appointmentForm";
     }
+
     /** Aqui voy a eliminar a un turno */
 
-    /*
-    @DeleteMapping("/delete/{id}")
-    public ResponseEntity<String> eliminar(@PathVariable Integer id) {
-        ResponseEntity<String> response = null;
-
-        if (appointmentService.getById(id) != null) {
-            appointmentService.delete(id);
-            response = ResponseEntity.status(HttpStatus.NO_CONTENT).body("Turno eliminado");
-        } else {
-            response = ResponseEntity.status(HttpStatus.NOT_FOUND).build();
-        }
-
-        return response;
-    }
-
-     */
     @GetMapping("/delete/{id}")
     public String eliminar(@PathVariable Integer id){
         appointmentService.delete(id);
         return "redirect:/appointments";
     }
 
+    /** Aqui voy a listar todos los turnos como rest*/
+
     @GetMapping("/all")
     public ResponseEntity<List<Appointment>> turnos() {
         return ResponseEntity.ok(appointmentService.findAllEntity());
     }
+
+    /** Aqui voy a listar todos los turnos renderizando en html*/
 
     @GetMapping
     public String findAllAppointmens(Model model) throws ServerException {
@@ -131,6 +95,8 @@ public class AppointmentController {
             return "appointments";
         }
     }
+
+    /**Estos van a usarse como filtros*/
 
     @GetMapping("/filter/patient/{patient_id}")
     public String filterByPatientId(@PathVariable Integer patient_id, Model model){
@@ -147,7 +113,7 @@ public class AppointmentController {
     }
 
 
-    /**Aqui voy a obtener los datos del dentista*/
+    /**Aqui voy a obtener los datos del dentista FORM*/
 
     @GetMapping("/new")
     public String showNewForm(Model model){
@@ -158,5 +124,47 @@ public class AppointmentController {
         model.addAttribute("appointment", new Appointment());
         return "appointmentForm";
     }
+
+
+    /**Esto voy a guardar para rest*/
+
+    /*
+    @DeleteMapping("/delete/{id}")
+    public ResponseEntity<String> eliminar(@PathVariable Integer id) {
+        ResponseEntity<String> response = null;
+
+        if (appointmentService.getById(id) != null) {
+            appointmentService.delete(id);
+            response = ResponseEntity.status(HttpStatus.NO_CONTENT).body("Turno eliminado");
+        } else {
+            response = ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        }
+
+        return response;
+    }
+
+    @PutMapping("/update")
+    public ResponseEntity<AppointmentDTO> update(@RequestBody AppointmentDTO appointmentDTO) throws ServerException{
+        if(appointmentService.update(appointmentDTO) == null){
+            throw new ServerException("No se encontro el paciente");
+        } else {
+            return ResponseEntity.ok(appointmentService.update(appointmentDTO));
+        }
+    }
+
+    //con rest
+    @PostMapping(name = "save",
+            consumes = MediaType.APPLICATION_JSON_VALUE,
+            produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<AppointmentDTO> create(@RequestBody Appointment newAppointment) throws ServerException {
+        AppointmentDTO appointmentDTO = appointmentService.save(newAppointment);
+        if (appointmentDTO == null) {
+            throw new ServerException("Error al insertar el turno");
+        } else {
+            return new ResponseEntity<>(appointmentDTO, HttpStatus.CREATED);
+        }
+    }
+
+     */
 }
 

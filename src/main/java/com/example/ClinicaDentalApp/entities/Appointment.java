@@ -19,7 +19,7 @@ public class Appointment {
     @JoinColumn(name = "patient_id",referencedColumnName = "id")
     private Patient patient;
     @ManyToOne(cascade = {CascadeType.REMOVE, CascadeType.MERGE, CascadeType.PERSIST}, fetch = FetchType.EAGER)
-    @JoinColumn(name = "denstist_id", referencedColumnName = "id")
+    @JoinColumn(name = "dentist_id", referencedColumnName = "id")
     private Dentist dentist;
     @Column(name = "appointment_date")
     private LocalDate date;
