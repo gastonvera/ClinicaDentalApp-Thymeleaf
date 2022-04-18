@@ -21,8 +21,9 @@ public class AddressService implements IAddressService {
     public ModelMapper modelMapper;
 
     @Override
-    public AddressDTO save(Address address) {
-        Address newAddress =  iAddressRepository.save(address);
+    public AddressDTO save(AddressDTO addressDTO) {
+        Address newAddress = mapEntity(addressDTO);
+        iAddressRepository.save(newAddress);
         return mapDTO(newAddress);
     }
 
@@ -42,8 +43,8 @@ public class AddressService implements IAddressService {
 
     @Override
     public AddressDTO update(AddressDTO addressDTO) {
-        Address address = mapEntity(addressDTO);
-        Address newAddress =  iAddressRepository.save(address);
+        Address newAddress = mapEntity(addressDTO);
+        iAddressRepository.save(newAddress);
         return mapDTO(newAddress);
     }
 

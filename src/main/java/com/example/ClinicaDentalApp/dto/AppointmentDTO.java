@@ -1,19 +1,17 @@
 package com.example.ClinicaDentalApp.dto;
 
-import lombok.AllArgsConstructor;
+import com.example.ClinicaDentalApp.entities.Dentist;
+import com.example.ClinicaDentalApp.entities.Patient;
 import lombok.Data;
-import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
 
-@AllArgsConstructor
-@NoArgsConstructor
 @Data
 public class AppointmentDTO {
     private Integer id;
-    private int consultingRoom;
+    private Dentist dentist;
+    private Patient patient;
     private LocalDate date;
-    private PatientDTO patient;
-    private DentistDTO dentist;
     private String hour;
+    private int consultingRoom;
 }

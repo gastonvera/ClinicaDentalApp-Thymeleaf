@@ -23,25 +23,11 @@ import java.util.stream.Collectors;
         public ModelMapper modelMapper;
 
         @Override
-        public PatientDTO save(Patient patient) {
-            patient.setAdmissionDate(LocalDate.now());
-            Patient newPatient =  iPatientRepository.save(patient);
+        public PatientDTO save(PatientDTO patientDTO) {
+            patientDTO.setAdmissionDate(LocalDate.now());
+            Patient newPatient = mapEntity(patientDTO);
+            iPatientRepository.save(newPatient);
             return mapDTO(newPatient);
-        }
-
-        @Override
-        public PatientDTO findByEmail(String email) {
-            return null;
-        }
-
-        @Override
-        public List<Patient> traerTodos() {
-            return iPatientRepository.findAll();
-        }
-
-        @Override
-        public Patient findEntityById(Integer id) {
-            return iPatientRepository.getById(id);
         }
 
         @Override
@@ -53,17 +39,15 @@ import java.util.stream.Collectors;
 
         @Override
         public void delete(Integer id) {
-            Patient patient = iPatientRepository.getById(id);
-            if(patient != null){
-                patient.setAddress(null);
+            if(iPatientRepository.findById(id).isPresent()) {
                 iPatientRepository.deleteById(id);
             }
         }
 
         @Override
         public PatientDTO update(PatientDTO patientDTO) {
-            Patient patient = mapEntity(patientDTO);
-            Patient newPatient = iPatientRepository.save(patient);
+            Patient newPatient = mapEntity(patientDTO);
+            iPatientRepository.save(newPatient);
             return mapDTO(newPatient);
         }
 
@@ -75,7 +59,7 @@ import java.util.stream.Collectors;
         }
 
 
-        //-------MAPPER
+        //-------MAPPER--------//
 
         private PatientDTO mapDTO(Patient patient){
             PatientDTO patientDTO = modelMapper.map(patient, PatientDTO.class);

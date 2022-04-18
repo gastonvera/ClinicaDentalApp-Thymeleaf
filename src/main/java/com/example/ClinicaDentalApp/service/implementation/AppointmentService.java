@@ -22,39 +22,30 @@ public class AppointmentService implements IAppointmentService {
     public ModelMapper modelMapper;
 
     @Override
-    public AppointmentDTO save(Appointment appointment) {
+    public AppointmentDTO save(AppointmentDTO appointmentDTO) {
         /*
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("YYYY-MM-DD");
         appointment.setDate(LocalDate.parse(appointment.getDate().format(formatter)));
          */
-        appointment.setDate(LocalDate.now());
-        Appointment newAppointment = iAppointmentRepository.save(appointment);
+
+        appointmentDTO.setDate(LocalDate.now());
+        Appointment newAppointment = mapEntity(appointmentDTO);
+        iAppointmentRepository.save(newAppointment);
         return mapDTO(newAppointment);
     }
 
     @Override
-    public List<Appointment> findAllEntity() {
-        return iAppointmentRepository.findAll();
-    }
-
-    @Override
-    public Appointment findEntityById(Integer id) {
-        Appointment appointment = iAppointmentRepository.getById(id);
-        return appointment;
-    }
-
-    @Override
-    public List<Appointment> findAppointmentsForPatientById(Integer patient_id) {
+    public List<AppointmentDTO> findAppointmentsForPatientById(Integer patient_id) {
         List<Appointment> appointmentList =  iAppointmentRepository.findAppointmentsForPatientById(patient_id);
         List<AppointmentDTO> appointmentDTOList = appointmentList.stream().map(appointment -> mapDTO(appointment)).collect(Collectors.toList());
-        return appointmentList;
+        return appointmentDTOList;
     }
 
     @Override
-    public List<Appointment> findAppointmentsForDentistById(Integer patient_id) {
+    public List<AppointmentDTO> findAppointmentsForDentistById(Integer patient_id) {
         List<Appointment> appointmentList =  iAppointmentRepository.findAppointmentsForDentistById(patient_id);
         List<AppointmentDTO> appointmentDTOList = appointmentList.stream().map(appointment -> mapDTO(appointment)).collect(Collectors.toList());
-        return appointmentList;
+        return appointmentDTOList;
     }
 
 
@@ -76,8 +67,8 @@ public class AppointmentService implements IAppointmentService {
 
     @Override
     public AppointmentDTO update(AppointmentDTO appointmentDTO) {
-        Appointment appointment = mapEntity(appointmentDTO);
-        Appointment newAppointment =  iAppointmentRepository.save(appointment);
+        Appointment newAppointment = mapEntity(appointmentDTO);
+        iAppointmentRepository.save(newAppointment);
         return mapDTO(newAppointment);
     }
 
@@ -88,7 +79,7 @@ public class AppointmentService implements IAppointmentService {
         return  appointmentDTOList;
     }
 
-    //-------MAPPER
+    //-------MAPPER-----//
 
     private AppointmentDTO mapDTO(Appointment appointment){
         AppointmentDTO appointmentDTO = modelMapper.map(appointment, AppointmentDTO.class);

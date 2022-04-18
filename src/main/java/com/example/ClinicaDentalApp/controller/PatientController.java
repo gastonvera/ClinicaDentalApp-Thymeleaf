@@ -1,5 +1,6 @@
 package com.example.ClinicaDentalApp.controller;
 
+import com.example.ClinicaDentalApp.dto.AppointmentDTO;
 import com.example.ClinicaDentalApp.dto.PatientDTO;
 import com.example.ClinicaDentalApp.entities.Appointment;
 import com.example.ClinicaDentalApp.entities.Dentist;
@@ -29,7 +30,7 @@ public class PatientController {
     /** Aqui voy a cargar los pacientes*/
 
     @PostMapping("save")
-    public String create(Patient newPatient){
+    public String create(PatientDTO newPatient){
         patientService.save(newPatient);
         return "redirect:/patients";
     }
@@ -40,16 +41,16 @@ public class PatientController {
     public ResponseEntity<PatientDTO> findById(@PathVariable int id) throws ServerException{
         if(patientService.getById(id) == null){
             throw new ServerException("No se encontro el paciente");
-        } else {
-            return ResponseEntity.ok(patientService.getById(id));
         }
+
+        return ResponseEntity.ok(patientService.getById(id));
     }
 
     /** Aqui voy a modificar a un paciente*/
 
     @GetMapping("update/{id}")
     public String updatePatient(@PathVariable Integer id, Model model) {
-        Patient patient = patientService.findEntityById(id);
+        PatientDTO patient = patientService.getById(id);
         model.addAttribute("patient", patient);
         return "patientForm";
     }
@@ -58,24 +59,25 @@ public class PatientController {
 
     @GetMapping("/delete/{id}")
     public String delete(@PathVariable Integer id) {
-        List<Appointment> appointmentList = appointmentService.findAppointmentsForPatientById(id);
+        String response;
+        List<AppointmentDTO> appointmentList = appointmentService.findAppointmentsForPatientById(id);
         if (appointmentList != null) {
             patientService.delete(id);
-            return "redirect:/patients";
+            response = "redirect:/patients";
         } else {
-            return "redirect:/error";
+            response = "redirect:/error";
         }
+        return response;
     }
 
     @GetMapping
     public String findAllPatients(Model model) throws ServerException {
         if (patientService.findAll() == null){
             throw new ServerException("Lista vacia");
-        } else {
-            List<PatientDTO> patientList = patientService.findAll();
-            model.addAttribute("patientList", patientList);
-            return "patients";
         }
+        List<PatientDTO> patientList = patientService.findAll();
+        model.addAttribute("patientList", patientList);
+        return "patients";
     }
 
     /**Aqui voy a obtener los datos del dentista*/
@@ -84,11 +86,6 @@ public class PatientController {
     public String showNewForm(Model model){
         model.addAttribute("patient", new Patient());
         return "patientForm";
-    }
-
-    @GetMapping("/all")
-    public ResponseEntity<List<Patient>> turnos() {
-        return ResponseEntity.ok(patientService.traerTodos());
     }
 
     /**Guardo para rest*/

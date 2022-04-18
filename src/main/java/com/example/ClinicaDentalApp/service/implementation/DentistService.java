@@ -21,20 +21,15 @@ public class DentistService implements IDentistService {
     public ModelMapper modelMapper;
 
     @Override
-    public DentistDTO save(Dentist dentist) {
-        Dentist newDentist = (Dentist) iDentistRepository.save(dentist);
+    public DentistDTO save(DentistDTO dentistDTO) {
+        Dentist newDentist = mapEntity(dentistDTO);
+        iDentistRepository.save(newDentist);
         return mapDTO(newDentist);
     }
 
     @Override
-    public Dentist findEntityById(Integer id) {
-        Dentist dentist = (Dentist) iDentistRepository.getById(id);
-        return dentist;
-    }
-
-    @Override
     public DentistDTO getById(Integer id) {
-        Dentist dentist = (Dentist) iDentistRepository.getById(id);
+        Dentist dentist = iDentistRepository.getById(id);
         DentistDTO newDentistDTO = mapDTO(dentist);
         return newDentistDTO;
     }
@@ -48,7 +43,8 @@ public class DentistService implements IDentistService {
 
     @Override
     public DentistDTO update(DentistDTO dentistDTO) {
-        Dentist newDentist = (Dentist) iDentistRepository.save(dentistDTO);
+        Dentist newDentist = mapEntity(dentistDTO);
+        iDentistRepository.save(newDentist);
         return mapDTO(newDentist);
     }
 
@@ -60,7 +56,7 @@ public class DentistService implements IDentistService {
     }
 
 
-    //-------MAPPER
+    //-------MAPPER-----//
 
     private DentistDTO mapDTO(Dentist dentist){
         DentistDTO dentistDTO = modelMapper.map(dentist, DentistDTO.class);

@@ -32,7 +32,7 @@ public class AppointmentController {
     /** Aqui voy a cargar los turnos*/
 
     @PostMapping("/save")
-    public String create(Appointment newAppointment){
+    public String create(AppointmentDTO newAppointment){
         appointmentService.save(newAppointment);
         return "redirect:/appointments";
     }
@@ -43,16 +43,16 @@ public class AppointmentController {
     public ResponseEntity<AppointmentDTO> findById(@PathVariable Integer id) throws ServerException{
         if(appointmentService.getById(id) == null){
             throw new ServerException("No se encontro el turno");
-        } else {
-            return ResponseEntity.ok(appointmentService.getById(id));
         }
+
+        return ResponseEntity.ok(appointmentService.getById(id));
     }
 
     /** Aqui voy a modificar a un turno*/
 
 
     @PutMapping("/update")
-    public String update(Appointment appointment){
+    public String update(AppointmentDTO appointment){
         appointmentService.save(appointment);
         return "redirect:/appointments";
     }
@@ -61,7 +61,7 @@ public class AppointmentController {
     public String updateAppointment(@PathVariable Integer id, Model model) {
         List<PatientDTO> patientList = patientService.findAll();
         List<DentistDTO> dentistList = dentistService.findAll();
-        Appointment appointment = appointmentService.findEntityById(id);
+        AppointmentDTO appointment = appointmentService.getById(id);
         model.addAttribute("dentistList", dentistList);
         model.addAttribute("patientList", patientList);
         model.addAttribute("appointment", appointment);
@@ -71,16 +71,9 @@ public class AppointmentController {
     /** Aqui voy a eliminar a un turno */
 
     @GetMapping("/delete/{id}")
-    public String eliminar(@PathVariable Integer id){
+    public String delete(@PathVariable Integer id){
         appointmentService.delete(id);
         return "redirect:/appointments";
-    }
-
-    /** Aqui voy a listar todos los turnos como rest*/
-
-    @GetMapping("/all")
-    public ResponseEntity<List<Appointment>> turnos() {
-        return ResponseEntity.ok(appointmentService.findAllEntity());
     }
 
     /** Aqui voy a listar todos los turnos renderizando en html*/
@@ -89,25 +82,24 @@ public class AppointmentController {
     public String findAllAppointmens(Model model) throws ServerException {
         if (appointmentService.findAll() == null){
             throw new ServerException("Lista vacia");
-        } else {
-            List<AppointmentDTO> appointmentList = appointmentService.findAll();
-            model.addAttribute("appointmentList",appointmentList );
-            return "appointments";
         }
+        List<AppointmentDTO> appointmentList = appointmentService.findAll();
+        model.addAttribute("appointmentList",appointmentList );
+        return "appointments";
     }
 
     /**Estos van a usarse como filtros*/
 
     @GetMapping("/filter/patient/{patient_id}")
     public String filterByPatientId(@PathVariable Integer patient_id, Model model){
-            List<Appointment> appointmentList = appointmentService.findAppointmentsForPatientById(patient_id);
+            List<AppointmentDTO> appointmentList = appointmentService.findAppointmentsForPatientById(patient_id);
             model.addAttribute("appointmentList",appointmentList );
             return "appointments";
     }
 
     @GetMapping("/filter/dentist/{dentist_id}")
     public String filterByDentistId(@PathVariable Integer dentist_id, Model model){
-        List<Appointment> appointmentList = appointmentService.findAppointmentsForDentistById(dentist_id);
+        List<AppointmentDTO> appointmentList = appointmentService.findAppointmentsForDentistById(dentist_id);
         model.addAttribute("appointmentList",appointmentList );
         return "appointments";
     }
