@@ -16,7 +16,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 public class DentistRepositoryTest {
     @Autowired
     private IDentistRepository iDentistRepository;
-/*
+
     @Test
     public void testAddNew(){
 
@@ -31,6 +31,4 @@ public class DentistRepositoryTest {
 
         assertThat(dentistSaved.getId()).isGreaterThan(0);
     }
-
- */
 }

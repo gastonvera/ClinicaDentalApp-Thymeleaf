@@ -15,6 +15,8 @@ import org.springframework.test.annotation.Rollback;
 
 import java.time.LocalDate;
 
+import static org.assertj.core.api.Assertions.assertThat;
+
 @DataJpaTest
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
 @Rollback(value = false)
@@ -22,16 +24,20 @@ public class AppointmentRepositoryTest {
 
     @Autowired
     private IAppointmentRepository iAppointmentRepository;
+
+    @Autowired
     private IPatientRepository iPatientRepository;
+
+    @Autowired
     private IDentistRepository iDentistRepository;
 
-    /*
+
     @Test
     public void testAddNew(){
         //Datos del paciente
-        Patient patient = iPatientRepository.getById(11);
+        Patient patient = iPatientRepository.getById(1);
         //Datos del odontologo
-        Dentist dentist = (Dentist) iDentistRepository.getById(12);
+        Dentist dentist = (Dentist) iDentistRepository.getById(1);
         //turno
         Appointment appointment = new Appointment();
         appointment.setDate(LocalDate.now());
@@ -40,8 +46,6 @@ public class AppointmentRepositoryTest {
         appointment.setDentist(dentist);
         Appointment appointmentSaved = iAppointmentRepository.save(appointment);
 
-        Assertions.assertTrue( appointmentSaved!= null);
+        assertThat(appointmentSaved.getId()).isGreaterThan(0);
     }
-
-     */
 }
