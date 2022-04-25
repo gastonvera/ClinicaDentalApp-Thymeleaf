@@ -2,6 +2,7 @@ package com.example.ClinicaDentalApp.service.implementation;
 
 import com.example.ClinicaDentalApp.dto.DentistDTO;
 import com.example.ClinicaDentalApp.entities.Dentist;
+import com.example.ClinicaDentalApp.exceptions.ResourceNotFoundException;
 import com.example.ClinicaDentalApp.repository.IDentistRepository;
 import com.example.ClinicaDentalApp.service.IDentistService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,21 +29,29 @@ public class DentistService implements IDentistService {
     }
 
     @Override
-    public DentistDTO getById(Integer id) {
+    public DentistDTO getById(Integer id)  throws ResourceNotFoundException {
+        if (iDentistRepository.findById(id).isPresent()) {
+            throw new ResourceNotFoundException("No se encontro el turno con id: " + id);
+        }
         Dentist dentist = iDentistRepository.getById(id);
         DentistDTO newDentistDTO = mapDTO(dentist);
         return newDentistDTO;
     }
 
     @Override
-    public void delete(Integer id) {
-        if(iDentistRepository.findById(id).isPresent()){
-            iDentistRepository.deleteById(id);
+    public void delete(Integer id) throws ResourceNotFoundException {
+        if (iDentistRepository.findById(id).isPresent()) {
+            throw new ResourceNotFoundException("No se encontro el turno con id: " + id);
         }
+        iDentistRepository.deleteById(id);
+
     }
 
     @Override
-    public DentistDTO update(DentistDTO dentistDTO) {
+    public DentistDTO update(DentistDTO dentistDTO)  throws ResourceNotFoundException {
+        if (iDentistRepository.findById(dentistDTO.getId()).isPresent()) {
+            throw new ResourceNotFoundException("No se encontro el turno con id: " + dentistDTO.getId());
+        }
         Dentist newDentist = mapEntity(dentistDTO);
         iDentistRepository.save(newDentist);
         return mapDTO(newDentist);

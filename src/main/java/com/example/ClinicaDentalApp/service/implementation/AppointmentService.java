@@ -2,6 +2,7 @@ package com.example.ClinicaDentalApp.service.implementation;
 
 import com.example.ClinicaDentalApp.dto.AppointmentDTO;
 import com.example.ClinicaDentalApp.entities.Appointment;
+import com.example.ClinicaDentalApp.exceptions.ResourceNotFoundException;
 import com.example.ClinicaDentalApp.repository.IAppointmentRepository;
 import com.example.ClinicaDentalApp.service.IAppointmentService;
 import org.modelmapper.ModelMapper;
@@ -50,23 +51,30 @@ public class AppointmentService implements IAppointmentService {
 
 
     @Override
-    public AppointmentDTO getById(Integer id) {
+    public AppointmentDTO getById(Integer id) throws ResourceNotFoundException {
+        if (iAppointmentRepository.findById(id).isPresent()) {
+            throw new ResourceNotFoundException("No se encontro el turno con id: " + id);
+        }
         Appointment appointment = iAppointmentRepository.getById(id);
         AppointmentDTO newAppointmentDTO = mapDTO(appointment);
         return newAppointmentDTO;
     }
 
     @Override
-    public void delete(Integer id) {
-        if(iAppointmentRepository.findById(id).isPresent()){
-            iAppointmentRepository.getById(id).setPatient(null);
-            iAppointmentRepository.getById(id).setDentist(null);
-            iAppointmentRepository.deleteById(id);
+    public void delete(Integer id) throws ResourceNotFoundException {
+        if (iAppointmentRepository.findById(id).isPresent()) {
+            throw new ResourceNotFoundException("No se encontro el turno con id: " + id);
         }
+        iAppointmentRepository.getById(id).setPatient(null);
+        iAppointmentRepository.getById(id).setDentist(null);
+        iAppointmentRepository.deleteById(id);
     }
 
     @Override
-    public AppointmentDTO update(AppointmentDTO appointmentDTO) {
+    public AppointmentDTO update(AppointmentDTO appointmentDTO) throws ResourceNotFoundException {
+        if (iAppointmentRepository.findById(appointmentDTO.getId()).isPresent()) {
+            throw new ResourceNotFoundException("No se encontro el turno con id: " + appointmentDTO.getId());
+        }
         Appointment newAppointment = mapEntity(appointmentDTO);
         iAppointmentRepository.save(newAppointment);
         return mapDTO(newAppointment);

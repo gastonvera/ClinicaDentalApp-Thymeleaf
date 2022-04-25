@@ -2,6 +2,7 @@ package com.example.ClinicaDentalApp.service.implementation;
 
 import com.example.ClinicaDentalApp.dto.PatientDTO;
 import com.example.ClinicaDentalApp.entities.Patient;
+import com.example.ClinicaDentalApp.exceptions.ResourceNotFoundException;
 import com.example.ClinicaDentalApp.repository.IPatientRepository;
 import com.example.ClinicaDentalApp.service.IPatientService;
 import org.modelmapper.ModelMapper;
@@ -31,21 +32,28 @@ import java.util.stream.Collectors;
         }
 
         @Override
-        public PatientDTO getById(Integer id) {
+        public PatientDTO getById(Integer id)  throws ResourceNotFoundException {
+            if (iPatientRepository.findById(id).isPresent()) {
+                throw new ResourceNotFoundException("No se encontro el turno con id: " + id);
+            }
             Patient patient = iPatientRepository.getById(id);
             PatientDTO newPatientDTO = mapDTO(patient);
             return newPatientDTO;
         }
 
         @Override
-        public void delete(Integer id) {
-            if(iPatientRepository.findById(id).isPresent()) {
-                iPatientRepository.deleteById(id);
+        public void delete(Integer id)  throws ResourceNotFoundException {
+            if (iPatientRepository.findById(id).isPresent()) {
+                throw new ResourceNotFoundException("No se encontro el turno con id: " + id);
             }
+            iPatientRepository.deleteById(id);
         }
 
         @Override
-        public PatientDTO update(PatientDTO patientDTO) {
+        public PatientDTO update(PatientDTO patientDTO) throws ResourceNotFoundException {
+            if (iPatientRepository.findById(patientDTO.getId()).isPresent()) {
+                throw new ResourceNotFoundException("No se encontro el turno con id: " + patientDTO.getId());
+            }
             Patient newPatient = mapEntity(patientDTO);
             iPatientRepository.save(newPatient);
             return mapDTO(newPatient);

@@ -2,12 +2,12 @@ package com.example.ClinicaDentalApp.controller;
 
 import com.example.ClinicaDentalApp.dto.AppointmentDTO;
 import com.example.ClinicaDentalApp.dto.PatientDTO;
-import com.example.ClinicaDentalApp.entities.Appointment;
-import com.example.ClinicaDentalApp.entities.Dentist;
 import com.example.ClinicaDentalApp.entities.Patient;
+import com.example.ClinicaDentalApp.exceptions.ResourceNotFoundException;
 import com.example.ClinicaDentalApp.service.implementation.AppointmentService;
 import com.example.ClinicaDentalApp.service.implementation.PatientService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -26,6 +26,13 @@ public class PatientController {
     @Autowired
     private AppointmentService appointmentService;
 
+    /** Aqui voy a crear mi metodo de exception not found */
+
+    @ExceptionHandler({ResourceNotFoundException.class})
+    public ResponseEntity<String> notFound(ResourceNotFoundException ex) {
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ex.getMessage());
+    }
+
 
     /** Aqui voy a cargar los pacientes*/
 
@@ -38,18 +45,14 @@ public class PatientController {
     /** Aqui voy a buscar un paciente por id*/
 
     @GetMapping("/{id}")
-    public ResponseEntity<PatientDTO> findById(@PathVariable int id) throws ServerException{
-        if(patientService.getById(id) == null){
-            throw new ServerException("No se encontro el paciente");
-        }
-
+    public ResponseEntity<PatientDTO> findById(@PathVariable int id) throws ResourceNotFoundException{
         return ResponseEntity.ok(patientService.getById(id));
     }
 
     /** Aqui voy a modificar a un paciente*/
 
     @GetMapping("update/{id}")
-    public String updatePatient(@PathVariable Integer id, Model model) {
+    public String updatePatient(@PathVariable Integer id, Model model) throws ResourceNotFoundException {
         PatientDTO patient = patientService.getById(id);
         model.addAttribute("patient", patient);
         return "patientForm";
@@ -58,7 +61,7 @@ public class PatientController {
     /** Aqui voy a eliminar a un paciente */
 
     @GetMapping("/delete/{id}")
-    public String delete(@PathVariable Integer id) {
+    public String delete(@PathVariable Integer id) throws ResourceNotFoundException {
         String response;
         List<AppointmentDTO> appointmentList = appointmentService.findAppointmentsForPatientById(id);
         if (appointmentList != null) {
@@ -88,7 +91,7 @@ public class PatientController {
         return "patientForm";
     }
 
-    /**Guardo para rest*/
+    /* Guardo para rest*/
 
 
     /*

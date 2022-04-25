@@ -2,6 +2,7 @@ package com.example.ClinicaDentalApp.service.implementation;
 
 import com.example.ClinicaDentalApp.dto.AddressDTO;
 import com.example.ClinicaDentalApp.entities.Address;
+import com.example.ClinicaDentalApp.exceptions.ResourceNotFoundException;
 import com.example.ClinicaDentalApp.repository.IAddressRepository;
 import com.example.ClinicaDentalApp.service.IAddressService;
 import org.modelmapper.ModelMapper;
@@ -28,21 +29,29 @@ public class AddressService implements IAddressService {
     }
 
     @Override
-    public AddressDTO getById(Integer id) {
+    public AddressDTO getById(Integer id) throws ResourceNotFoundException {
+        if (iAddressRepository.findById(id).isPresent()) {
+            throw new ResourceNotFoundException("No se encontro el turno con id: " + id);
+        }
         Address address = iAddressRepository.getById(id);
         AddressDTO newAddressDTO = mapDTO(address);
         return newAddressDTO;
     }
 
     @Override
-    public void delete(Integer id) {
-        if(iAddressRepository.findById(id).isPresent()){
-            iAddressRepository.deleteById(id);
+    public void delete(Integer id) throws ResourceNotFoundException {
+        if (iAddressRepository.findById(id).isPresent()) {
+            throw new ResourceNotFoundException("No se encontro el turno con id: " + id);
         }
+        iAddressRepository.deleteById(id);
+
     }
 
     @Override
-    public AddressDTO update(AddressDTO addressDTO) {
+    public AddressDTO update(AddressDTO addressDTO) throws ResourceNotFoundException {
+        if (iAddressRepository.findById(addressDTO.getId()).isPresent()) {
+            throw new ResourceNotFoundException("No se encontro el turno con id: " + addressDTO.getId());
+        }
         Address newAddress = mapEntity(addressDTO);
         iAddressRepository.save(newAddress);
         return mapDTO(newAddress);

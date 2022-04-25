@@ -42,6 +42,7 @@ public class AppointmentRepositoryTest {
         Appointment appointment = new Appointment();
         appointment.setDate(LocalDate.now());
         appointment.setConsultingRoom(15);
+        appointment.setHour("10:00");
         appointment.setPatient(patient);
         appointment.setDentist(dentist);
         Appointment appointmentSaved = iAppointmentRepository.save(appointment);
